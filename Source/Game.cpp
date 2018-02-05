@@ -55,8 +55,23 @@ bool BreakoutGame::init()
 	mouse_callback_id =inputs->addCallbackFnc(
 		ASGE::E_MOUSE_CLICK, &BreakoutGame::clickHandler, this);
 
+	if (!paddle.addSpriteComponent(renderer.get(),
+		".\\Resources\\Textures\\puzzlepack\\png\\paddleBlue.png"))
+	{
+		return false;
+	}
+	paddle_sprite = paddle.spriteComponent()->getSprite();
+	paddle_sprite->xPos((game_width - paddle_sprite->width() )/ 2);
+	paddle_sprite->yPos(game_height - 50);
 
-
+	if (!ball.addSpriteComponent(renderer.get(),
+		".\\Resources\\Textures\\puzzlepack\\png\\ballBlue.png"))
+	{
+		return false;
+	}
+	ball_sprite = ball.spriteComponent()->getSprite();
+	ball_sprite->xPos((game_width - ball_sprite->width()) / 2);
+	ball_sprite->yPos(game_height - 70);
 
 
 	return true;
@@ -99,6 +114,25 @@ void BreakoutGame::keyHandler(const ASGE::SharedEventData data)
 		signalExit();
 	}
 
+	if (key->key == ASGE::KEYS::KEY_ENTER)
+	{
+		in_menu = false;
+	}
+	if (key->action == ASGE::KEYS::KEY_PRESSED)
+	{
+		if (key->key == ASGE::KEYS::KEY_A)
+		{
+			direction = -1;
+		}
+		if (key->key == ASGE::KEYS::KEY_D)
+		{
+			direction = 1;
+		}
+	}
+	else if (key->action == ASGE::KEYS::KEY_RELEASED)
+	{
+		direction = 0;
+	}
 
 }
 
@@ -130,12 +164,49 @@ void BreakoutGame::clickHandler(const ASGE::SharedEventData data)
 */
 void BreakoutGame::update(const ASGE::GameTime& us)
 {
+	int x_pos = 20;
+	int y_pos = 30;
+
 	if (!in_menu)
 	{
+		auto paddle_pos = paddle_sprite->xPos();
 
+		paddle_pos += direction * move_speed * (us.delta_time.count() / 1000.f);
+	
+		paddle_sprite->xPos(paddle_pos);
 	}
 
 	auto dt_sec = us.delta_time.count() / 1000.0;
+
+	for (i = 0; i < array_size; i++)
+	{
+
+		if (!blocks[i].addSpriteComponent(renderer.get(),
+			".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png"))
+		{
+			blocks[i].addSpriteComponent(renderer.get(),
+				".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png");
+		}
+
+		block_sprite = blocks[i].spriteComponent()->getSprite();
+		block_sprite->xPos(x_pos);
+		block_sprite->yPos(y_pos);
+			
+		x_pos += (block_sprite->width() + 10);
+
+		if (x_pos + block_sprite->width() >= game_width)
+		{
+			x_pos = 20;
+			y_pos = block_sprite->height() + 50;
+		}
+
+		if (!in_menu)
+		{
+			renderer->renderSprite(*block_sprite);
+		}
+
+	}
+
 
 	//make sure you use delta time in any movement calculations!
 
@@ -155,12 +226,13 @@ void BreakoutGame::render(const ASGE::GameTime &)
 
 	if (in_menu)
 	{
-
+		renderer->renderText("Press Enter to continue", (game_width / 2) - 160, game_height / 2, ASGE::COLOURS::WHITE);
 	}
 	else
 	{
+		renderer->renderSprite(*paddle_sprite);
+		renderer->renderSprite(*ball_sprite);
 
+	
 	}
-
-
 }
