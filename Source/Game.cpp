@@ -164,8 +164,9 @@ void BreakoutGame::clickHandler(const ASGE::SharedEventData data)
 */
 void BreakoutGame::update(const ASGE::GameTime& us)
 {
-	int x_pos = 20;
-	int y_pos = 30;
+	int x_pos = 25;
+	int y_pos = 35;
+	int block_row = 1;
 
 	if (!in_menu)
 	{
@@ -196,8 +197,9 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 
 		if (x_pos + block_sprite->width() >= game_width)
 		{
-			x_pos = 20;
-			y_pos = block_sprite->height() + 50;
+			block_row++;
+			x_pos = 25;
+			y_pos = block_row * 35;
 		}
 
 		if (!in_menu)

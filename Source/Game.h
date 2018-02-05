@@ -31,7 +31,7 @@ private:
 	bool in_menu = true;
 	int direction = 0;
 	int move_speed = 150;
-	int array_size = 50;
+	int array_size = 48;
 	int i = 0;
 
 	//Add your GameObjects
@@ -41,7 +41,7 @@ private:
 	GameObject ball;
 	ASGE::Sprite* ball_sprite = nullptr;
 
-	GameObject blocks[50];
+	GameObject blocks[48];
 	ASGE::Sprite* block_sprite;
 
 
