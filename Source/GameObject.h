@@ -51,6 +51,6 @@ private:
 
 public: 
 	bool visibility = false;
-	int velocity = 0;
+	vector2 velocity = { 0,0 };
 	int speed = 150;
 };

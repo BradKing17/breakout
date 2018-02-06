@@ -45,7 +45,9 @@ bool BreakoutGame::init()
 		return false;
 	}
 
-	toggleFPS();
+
+	srand(time(NULL));
+	//toggleFPS();
 	renderer->setWindowTitle("Breakout!");
 
 	// input handling functions
@@ -75,7 +77,7 @@ bool BreakoutGame::init()
 	ball_sprite->xPos((game_width - ball_sprite->width()) / 2);
 	ball_sprite->yPos(game_height - 70);
 
-
+	spawn();
 
 
 	for (int i = 0; i < array_size; i++)
@@ -156,16 +158,16 @@ void BreakoutGame::keyHandler(const ASGE::SharedEventData data)
 	{
 		if (key->key == ASGE::KEYS::KEY_A)
 		{
-			paddle.velocity = -1;
+			paddle.velocity.x = -1;
 		}
 		if (key->key == ASGE::KEYS::KEY_D)
 		{
-			paddle.velocity = 1;
+			paddle.velocity.x = 1;
 		}
 	}
 	else if (key->action == ASGE::KEYS::KEY_RELEASED)
 	{
-		paddle.velocity = 0;
+		paddle.velocity.x = 0;
 	}
 
 }
@@ -203,15 +205,39 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 	{
 		auto paddle_pos = paddle_sprite->xPos();
 
-		auto ball_x_pos = paddle_sprite->xPos();
-		auto ball_y_pos = paddle_sprite->yPos();
-
-		paddle_pos += paddle.velocity * paddle.speed * (us.delta_time.count() / 1000.f);
+		auto ball_x_pos = ball_sprite->xPos();
+		auto ball_y_pos = ball_sprite->yPos();
+		
+		paddle_pos += paddle.velocity.x * paddle.speed * (us.delta_time.count() / 1000.f);
 	
 		paddle_sprite->xPos(paddle_pos);
 
-		ball_x_pos += ball.velocity * ball.speed * (us.delta_time.count() / 1000.f);
-		ball_y_pos += ball.velocity * ball.speed * (us.delta_time.count() / 1000.f);
+		ball_x_pos += ball.speed * ball_direction.x * (us.delta_time.count() / 1000.f);
+		ball_y_pos += ball.speed * ball_direction.y * (us.delta_time.count() / 1000.f);
+
+		if (ball_x_pos + ball_sprite->width() >= game_width || ball_x_pos <= 0)
+		{
+			ball_direction.x *= -1;
+		}
+
+		if (ball_y_pos <= 0)
+		{
+			ball_direction.y *= -1;
+		}
+
+		ball_sprite->xPos(ball_x_pos);
+		ball_sprite->yPos(ball_y_pos);
+
+		paddle_box = paddle.spriteComponent()->getBoundingBox();
+		ball_box = ball.spriteComponent()->getBoundingBox();
+
+		if (ball_box.isInside(paddle_box.x, paddle_box.y))
+		{
+			ball_direction.y *= -1;
+		}
+
+
+
 	}
 
 	auto dt_sec = us.delta_time.count() / 1000.0;
@@ -236,10 +262,12 @@ void BreakoutGame::render(const ASGE::GameTime &)
 
 	if (in_menu)
 	{
-		renderer->renderText("Press Enter to continue", (game_width / 2) - 160, game_height / 2, ASGE::COLOURS::WHITE);
+		renderer->renderText("Press Enter to continue",
+			(game_width / 2) - 160, game_height / 2, ASGE::COLOURS::WHITE);
 	}
 	else
 	{
+	
 		renderer->renderSprite(*paddle_sprite);
 		renderer->renderSprite(*ball_sprite);
 
@@ -254,3 +282,17 @@ void BreakoutGame::render(const ASGE::GameTime &)
 	
 	}
 }
+
+void BreakoutGame::spawn()
+{
+
+	auto x = (rand() % 10 + 1) - 5;
+	auto y = (rand() % 1 - 10);
+
+
+	ball_direction.x = x;
+	ball_direction.y = y;
+	ball_direction.normalise();
+}
+
+
