@@ -45,6 +45,12 @@ public:
 
 private:
 
+
 	void freeSpriteComponent();	
 	SpriteComponent* sprite_component = nullptr;
+
+public: 
+	bool visibility = false;
+	int velocity = 0;
+	int speed = 150;
 };

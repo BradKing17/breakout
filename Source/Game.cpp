@@ -14,6 +14,8 @@
 */
 BreakoutGame::BreakoutGame()
 {
+
+
 }
 
 /**
@@ -74,6 +76,38 @@ bool BreakoutGame::init()
 	ball_sprite->yPos(game_height - 70);
 
 
+
+
+	for (int i = 0; i < array_size; i++)
+	{
+
+		if (!blocks[i].addSpriteComponent(renderer.get(),
+			".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png"))
+		{
+			blocks[i].addSpriteComponent(renderer.get(),
+				".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png");
+		}
+
+		block_sprite = blocks[i].spriteComponent()->getSprite();
+		block_sprite->xPos(x_pos);
+		block_sprite->yPos(y_pos);
+
+		x_pos += (block_sprite->width() + 10);
+
+		if (x_pos + block_sprite->width() >= game_width)
+		{
+			block_row++;
+			x_pos = 20;
+			y_pos = block_row * 35;
+		}
+
+		blocks[i].visibility = true;
+		
+	}
+
+
+
+
 	return true;
 }
 
@@ -122,16 +156,16 @@ void BreakoutGame::keyHandler(const ASGE::SharedEventData data)
 	{
 		if (key->key == ASGE::KEYS::KEY_A)
 		{
-			direction = -1;
+			paddle.velocity = -1;
 		}
 		if (key->key == ASGE::KEYS::KEY_D)
 		{
-			direction = 1;
+			paddle.velocity = 1;
 		}
 	}
 	else if (key->action == ASGE::KEYS::KEY_RELEASED)
 	{
-		direction = 0;
+		paddle.velocity = 0;
 	}
 
 }
@@ -164,50 +198,24 @@ void BreakoutGame::clickHandler(const ASGE::SharedEventData data)
 */
 void BreakoutGame::update(const ASGE::GameTime& us)
 {
-	int x_pos = 25;
-	int y_pos = 35;
-	int block_row = 1;
 
 	if (!in_menu)
 	{
 		auto paddle_pos = paddle_sprite->xPos();
 
-		paddle_pos += direction * move_speed * (us.delta_time.count() / 1000.f);
+		auto ball_x_pos = paddle_sprite->xPos();
+		auto ball_y_pos = paddle_sprite->yPos();
+
+		paddle_pos += paddle.velocity * paddle.speed * (us.delta_time.count() / 1000.f);
 	
 		paddle_sprite->xPos(paddle_pos);
+
+		ball_x_pos += ball.velocity * ball.speed * (us.delta_time.count() / 1000.f);
+		ball_y_pos += ball.velocity * ball.speed * (us.delta_time.count() / 1000.f);
 	}
 
 	auto dt_sec = us.delta_time.count() / 1000.0;
 
-	for (i = 0; i < array_size; i++)
-	{
-
-		if (!blocks[i].addSpriteComponent(renderer.get(),
-			".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png"))
-		{
-			blocks[i].addSpriteComponent(renderer.get(),
-				".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png");
-		}
-
-		block_sprite = blocks[i].spriteComponent()->getSprite();
-		block_sprite->xPos(x_pos);
-		block_sprite->yPos(y_pos);
-			
-		x_pos += (block_sprite->width() + 10);
-
-		if (x_pos + block_sprite->width() >= game_width)
-		{
-			block_row++;
-			x_pos = 25;
-			y_pos = block_row * 35;
-		}
-
-		if (!in_menu)
-		{
-			renderer->renderSprite(*block_sprite);
-		}
-
-	}
 
 
 	//make sure you use delta time in any movement calculations!
@@ -234,6 +242,14 @@ void BreakoutGame::render(const ASGE::GameTime &)
 	{
 		renderer->renderSprite(*paddle_sprite);
 		renderer->renderSprite(*ball_sprite);
+
+		for (int j = 0; j < array_size; j++)
+		{
+			if (blocks[j].visibility == true)
+			{
+				renderer->renderSprite(*blocks[j].spriteComponent()->getSprite());
+			}
+		}
 
 	
 	}

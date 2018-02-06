@@ -29,10 +29,11 @@ private:
 	int  mouse_callback_id = -1;        /**< Mouse Input Callback ID. */
 
 	bool in_menu = true;
-	int direction = 0;
-	int move_speed = 150;
 	int array_size = 48;
-	int i = 0;
+	
+	int x_pos = 20;
+	int y_pos = 35;
+	int block_row = 1;
 
 	//Add your GameObjects
 	GameObject paddle;
