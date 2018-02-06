@@ -75,10 +75,12 @@ bool BreakoutGame::init()
 	}
 	ball_sprite = ball.spriteComponent()->getSprite();
 	ball_sprite->xPos((game_width - ball_sprite->width()) / 2);
-	ball_sprite->yPos(game_height - 70);
+	ball_sprite->yPos(game_height - 80);
+
 
 	spawn();
-
+	
+	
 
 	for (int i = 0; i < array_size; i++)
 	{
@@ -102,7 +104,7 @@ bool BreakoutGame::init()
 			x_pos = 20;
 			y_pos = block_row * 35;
 		}
-
+		
 		blocks[i].visibility = true;
 		
 	}
@@ -224,19 +226,32 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 		{
 			ball_direction.y *= -1;
 		}
-
-		ball_sprite->xPos(ball_x_pos);
-		ball_sprite->yPos(ball_y_pos);
-
-		paddle_box = paddle.spriteComponent()->getBoundingBox();
+	
 		ball_box = ball.spriteComponent()->getBoundingBox();
+		paddle_box = paddle.spriteComponent()->getBoundingBox();
 
-		if (ball_box.isInside(paddle_box.x, paddle_box.y))
+		if (ball_box.isInside(paddle_box))
 		{
+			ball_y_pos -= 5;
 			ball_direction.y *= -1;
 		}
 
 
+		for (int i = 0; i <= array_size; i++)
+		{
+			block_box = blocks[i].spriteComponent()->getBoundingBox();
+			if (ball_box.isInside(block_box))
+			{
+				renderer->renderText("boop", 10, 30, ASGE::COLOURS::WHITE);
+				ball_y_pos += 5;
+				ball_direction.y *= -1;
+		//		blocks[i]->visibility = false;
+
+			}
+
+		}
+		ball_sprite->xPos(ball_x_pos);
+		ball_sprite->yPos(ball_y_pos);
 
 	}
 

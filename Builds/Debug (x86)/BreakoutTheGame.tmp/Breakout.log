@@ -2,14 +2,14 @@
 c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(49): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(78): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(94): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(97): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(211): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(215): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(216): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(293): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(294): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(96): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(97): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(99): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(213): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(217): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(218): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(308): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\b7-king\source\repos\breakout-bradking17\source\game.cpp(309): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance

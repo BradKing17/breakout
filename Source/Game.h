@@ -50,6 +50,7 @@ private:
 
 	GameObject blocks[48];
 	ASGE::Sprite* block_sprite;
+	rect block_box;
 
 
 };
