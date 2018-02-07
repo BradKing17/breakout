@@ -83,13 +83,46 @@ bool BreakoutGame::init()
 	
 
 	for (int i = 0; i < array_size; i++)
-	{
 
-		if (!blocks[i].addSpriteComponent(renderer.get(),
-			".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png"))
+	{
+		if (block_row % 2 == 0)
 		{
-			blocks[i].addSpriteComponent(renderer.get(),
-				".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png");
+			if (i % 2 == 0)
+			{
+				if (!blocks[i].addSpriteComponent(renderer.get(),
+					".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png"))
+				{
+					blocks[i].addSpriteComponent(renderer.get(),
+						".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png");
+				}
+			}
+			else
+				if (!blocks[i].addSpriteComponent(renderer.get(),
+					".\\Resources\\Textures\\puzzlepack\\png\\element_blue_rectangle_glossy.png"))
+				{
+					blocks[i].addSpriteComponent(renderer.get(),
+						".\\Resources\\Textures\\puzzlepack\\png\\element_blue_rectangle_glossy.png");
+				}
+		}
+		else
+		{
+			if (i % 2 == 0)
+			{
+				if (!blocks[i].addSpriteComponent(renderer.get(),
+					".\\Resources\\Textures\\puzzlepack\\png\\element_blue_rectangle_glossy.png"))
+				{
+					blocks[i].addSpriteComponent(renderer.get(),
+						".\\Resources\\Textures\\puzzlepack\\png\\element_blue_rectangle_glossy.png");
+				}
+			}
+			else
+				if (!blocks[i].addSpriteComponent(renderer.get(),
+					".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png"))
+				{
+					blocks[i].addSpriteComponent(renderer.get(),
+						".\\Resources\\Textures\\puzzlepack\\png\\element_red_rectangle_glossy.png");
+				}
+
 		}
 
 		block_sprite = blocks[i].spriteComponent()->getSprite();
@@ -245,7 +278,7 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 				renderer->renderText("boop", 10, 30, ASGE::COLOURS::WHITE);
 				ball_y_pos += 5;
 				ball_direction.y *= -1;
-		//		blocks[i]->visibility = false;
+				blocks[i]->visibility = false;
 
 			}
 
