@@ -272,13 +272,16 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 
 		for (int i = 0; i <= array_size; i++)
 		{
+			
+
 			block_box = blocks[i].spriteComponent()->getBoundingBox();
-			if (ball_box.isInside(block_box))
+			if (ball_box.isInside(block_box) && blocks[i].visibility == true)
 			{
 				renderer->renderText("boop", 10, 30, ASGE::COLOURS::WHITE);
 				ball_y_pos += 5;
 				ball_direction.y *= -1;
-				blocks[i]->visibility = false;
+				blocks[i].visibility = false;
+				score += 10;
 
 			}
 

@@ -31,9 +31,9 @@ private:
 
 	bool in_menu = true;
 	int array_size = 48;
+	int score = 0;
+
 	
-
-
 	int x_pos = 20;
 	int y_pos = 35;
 	int block_row = 1;
