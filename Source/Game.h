@@ -21,7 +21,10 @@ private:
 	void keyHandler(const ASGE::SharedEventData data);
 	void clickHandler(const ASGE::SharedEventData data);
 	void setupResolution();
-	void spawn();
+	void respawn();
+	void paddleMovement(float dt_sec);
+	void ballMovement(float dt_sec);
+	void collision();
 
 	virtual void update(const ASGE::GameTime &) override;
 	virtual void render(const ASGE::GameTime &) override;
@@ -32,6 +35,8 @@ private:
 	bool in_menu = true;
 	int array_size = 48;
 	int score = 0;
+	int lives = 3;
+	int number_of_blocks = array_size;
 
 	
 	int x_pos = 20;
