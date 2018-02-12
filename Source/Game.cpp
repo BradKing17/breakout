@@ -334,8 +334,6 @@ void BreakoutGame::ballMovement(float dt_sec)
 	ball_y_pos += ball.ball_speed * ball_direction.y * dt_sec;
 
 
-
-
 	if (ball_box.isInside(paddle_box))
 	{
 		ball_y_pos -= 10;
