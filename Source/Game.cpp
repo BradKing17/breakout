@@ -136,9 +136,7 @@ bool BreakoutGame::init()
 		
 	}
 
-	ball_sprite->xPos((game_width - ball_sprite->width()) / 2);
-	ball_sprite->yPos(game_height - 80);
-
+	respawn();
 
 	return true;
 }
@@ -304,15 +302,12 @@ void BreakoutGame::respawn()
 	auto x = (rand() % 10 + 1) - 5;
 	auto y = (rand() % 1 - 10);
 
-	ball_sprite->xPos((game_width - ball_sprite->width()) / 2);
-	ball_sprite->yPos(game_height - 80);
-	
 	ball_direction.x = x;
 	ball_direction.y = y;
 	ball_direction.normalise();
 
-	lives--;
-
+	ball_sprite->xPos((game_width - ball_sprite->width()) / 2);
+	ball_sprite->yPos(game_height - 80);
 
 }
 
@@ -352,6 +347,7 @@ void BreakoutGame::ballMovement(float dt_sec)
 
 	if (ball_y_pos + ball_sprite->height() >= game_height)
 	{
+		lives--;
 		respawn();
 	}
 

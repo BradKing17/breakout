@@ -53,5 +53,5 @@ public:
 	bool visibility = false;
 	vector2 velocity = { 0,0 };
 	int paddle_speed = 300;
-	int ball_speed = 100;
+	int ball_speed = 300;
 };
