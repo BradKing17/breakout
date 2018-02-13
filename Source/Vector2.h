@@ -8,7 +8,7 @@ struct vector2
 	// operations
 	vector2 operator*(float scalar);
 	void normalise();
-	
+
 	// data
 	float x = 0;
 	float y = 0;

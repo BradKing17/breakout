@@ -45,13 +45,12 @@ public:
 
 private:
 
-
 	void freeSpriteComponent();	
 	SpriteComponent* sprite_component = nullptr;
 
 public: 
 	bool visibility = false;
 	vector2 velocity = { 0,0 };
-	int paddle_speed = 300;
-	int ball_speed = 300;
+	int speed = 300;
+
 };

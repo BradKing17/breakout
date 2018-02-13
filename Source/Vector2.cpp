@@ -50,3 +50,4 @@ vector2 vector2::operator*(float scalar)
 	vec.y *= scalar;
 	return vec;
 }
+

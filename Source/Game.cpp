@@ -232,7 +232,6 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 	auto dt_sec = us.delta_time.count() / 1000.0;
 
 	//make sure you use delta time in any movement calculations!
-
 	if (!in_menu)
 	{
 		paddleMovement(dt_sec);
@@ -241,7 +240,6 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 
 		collision();
 	}
-
 }
 
 /**
@@ -296,6 +294,7 @@ void BreakoutGame::render(const ASGE::GameTime &)
 	}
 }
 
+// Handles spawning the ball
 void BreakoutGame::respawn()
 {
 
@@ -311,22 +310,32 @@ void BreakoutGame::respawn()
 
 }
 
+// Handles paddle movement
 void BreakoutGame::paddleMovement(float dt_sec)
 {
 	auto paddle_pos = paddle_sprite->xPos();
 
-	paddle_pos += paddle.velocity.x * paddle.paddle_speed* dt_sec;
+	if (paddle_sprite->xPos() <= 0)
+	{
+		paddle.velocity.x *= -1;
+	}
+	if (paddle_sprite->xPos() + paddle_sprite->width() >= game_width)
+	{
+		paddle.velocity.x *= -1;
+	}
+
+	paddle_pos += paddle.velocity.x * paddle.speed* dt_sec;
 
 	paddle_sprite->xPos(paddle_pos);
 }
 
+// Handles ball movement
 void BreakoutGame::ballMovement(float dt_sec)
 {
 	auto ball_x_pos = ball_sprite->xPos();
 	auto ball_y_pos = ball_sprite->yPos();
 
-	ball_x_pos += ball.ball_speed * ball_direction.x * dt_sec;
-	ball_y_pos += ball.ball_speed * ball_direction.y * dt_sec;
+
 
 
 	if (ball_box.isInside(paddle_box))
@@ -345,17 +354,24 @@ void BreakoutGame::ballMovement(float dt_sec)
 		ball_direction.y *= -1;
 	}
 
+	ball_x_pos += ball.speed * ball_direction.x * dt_sec;
+	ball_y_pos += ball.speed * ball_direction.y * dt_sec;
+
+
+	ball_sprite->xPos(ball_x_pos);
+	ball_sprite->yPos(ball_y_pos);
+
 	if (ball_y_pos + ball_sprite->height() >= game_height)
 	{
 		lives--;
 		respawn();
 	}
 
-	ball_sprite->xPos(ball_x_pos);
-	ball_sprite->yPos(ball_y_pos);
+
 
 }
 
+// Handles all collisions
 void BreakoutGame::collision()
 {
 	ball_box = ball.spriteComponent()->getBoundingBox();
