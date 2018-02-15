@@ -76,7 +76,7 @@ bool BreakoutGame::init()
 	ball_sprite = ball.spriteComponent()->getSprite();
 	
 	
-	for (int i = 0; i < array_size; i++)
+	for (int i = 0; i < block_array_size; i++)
 
 	{
 		if (block_row % 2 == 0)
@@ -282,7 +282,7 @@ void BreakoutGame::render(const ASGE::GameTime &)
 		renderer->renderText(lives_str.c_str(),
 			20, game_height - 40, ASGE::COLOURS::WHITE);
 
-		for (int j = 0; j < array_size; j++)
+		for (int j = 0; j < _block_array_size; j++)
 		{
 			if (blocks[j].visibility == true)
 			{
@@ -378,7 +378,7 @@ void BreakoutGame::collision()
 	paddle_box = paddle.spriteComponent()->getBoundingBox();
 
 
-	for (int i = 0; i <= array_size; i++)
+	for (int i = 0; i <= block_array_size; i++)
 	{
 
 		block_box = blocks[i].spriteComponent()->getBoundingBox();

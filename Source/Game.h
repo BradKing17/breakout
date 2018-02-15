@@ -32,16 +32,18 @@ private:
 	int  key_callback_id = -1;	        /**< Key Input Callback ID. */
 	int  mouse_callback_id = -1;        /**< Mouse Input Callback ID. */
 
+	//General game variables
 	bool in_menu = true;
-	int array_size = 48;
 	int score = 0;
 	int lives = 3;
-	int number_of_blocks = array_size;
 
-	
+	//Block variables
+	int number_of_blocks = block_array_size;
 	int x_pos = 20;
 	int y_pos = 35;
 	int block_row = 1;
+	int block_array_size = 48;
+
 	vector2 ball_direction = { 2,3 };
 
 	//Add your GameObjects
