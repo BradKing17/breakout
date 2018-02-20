@@ -24,7 +24,7 @@ private:
 	void respawn();
 	void paddleMovement(float dt_sec);
 	void ballMovement(float dt_sec);
-	void collision();
+	void collision(const ASGE::GameTime & us);
 
 	virtual void update(const ASGE::GameTime &) override;
 	virtual void render(const ASGE::GameTime &) override;
@@ -38,11 +38,16 @@ private:
 	int lives = 3;
 
 	//Block variables
-	int number_of_blocks = block_array_size;
 	int x_pos = 20;
 	int y_pos = 35;
 	int block_row = 1;
 	int block_array_size = 48;
+	int number_of_blocks = block_array_size;
+
+	//Gem Variables
+	int gem_array_size = 3;
+	int number_of_gems = gem_array_size;
+	int gem_chance = 0;;
 
 	vector2 ball_direction = { 2,3 };
 
@@ -59,5 +64,8 @@ private:
 	ASGE::Sprite* block_sprite;
 	rect block_box;
 
+	GameObject gems[3];
+	ASGE::Sprite* gem_sprite;
+	rect gem_box;
 
 };

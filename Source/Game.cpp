@@ -119,6 +119,8 @@ bool BreakoutGame::init()
 
 		}
 
+		
+
 		block_sprite = blocks[i].spriteComponent()->getSprite();
 		block_sprite->xPos(x_pos);
 		block_sprite->yPos(y_pos);
@@ -135,6 +137,18 @@ bool BreakoutGame::init()
 		blocks[i].visibility = true;
 		
 	}
+	for (int i = 0; i < gem_array_size; i++)
+	{
+		if (!gems[i].addSpriteComponent(renderer.get(),
+			".\\Resources\\Textures\\puzzlepack\\png\\element_yellow_diamond_glossy.png"))
+		{
+			gems[i].addSpriteComponent(renderer.get(),
+				".\\Resources\\Textures\\puzzlepack\\png\\element_yellow_diamond_glossy.png");
+		}
+
+		gems[i].visibility = false;
+	}
+
 
 	respawn();
 
@@ -230,6 +244,7 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 {
 
 	auto dt_sec = us.delta_time.count() / 1000.0;
+	
 
 	//make sure you use delta time in any movement calculations!
 	if (!in_menu)
@@ -238,7 +253,7 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 
 		ballMovement(dt_sec);
 
-		collision();
+		collision(us);
 	}
 }
 
@@ -281,8 +296,11 @@ void BreakoutGame::render(const ASGE::GameTime &)
 		std::string lives_str = "Lives: " + std::to_string(lives);
 		renderer->renderText(lives_str.c_str(),
 			20, game_height - 40, ASGE::COLOURS::WHITE);
+		std::string gem_str = "Gem Chance: " + std::to_string(gem_chance);
+		renderer->renderText(gem_str.c_str(),
+			20, game_height - 60, ASGE::COLOURS::WHITE);
 
-		for (int j = 0; j < _block_array_size; j++)
+		for (int j = 0; j < block_array_size; j++)
 		{
 			if (blocks[j].visibility == true)
 			{
@@ -290,6 +308,13 @@ void BreakoutGame::render(const ASGE::GameTime &)
 			}
 		}
 
+		for (int j = 0; j < gem_array_size; j++)
+		{
+			if (gems[j].visibility == true)
+			{
+				renderer->renderSprite(*gems[j].spriteComponent()->getSprite());
+			}
+		}
 	
 	}
 }
@@ -372,7 +397,7 @@ void BreakoutGame::ballMovement(float dt_sec)
 }
 
 // Handles all collisions
-void BreakoutGame::collision()
+void BreakoutGame::collision(const ASGE::GameTime & us)
 {
 	ball_box = ball.spriteComponent()->getBoundingBox();
 	paddle_box = paddle.spriteComponent()->getBoundingBox();
@@ -384,11 +409,34 @@ void BreakoutGame::collision()
 		block_box = blocks[i].spriteComponent()->getBoundingBox();
 		if (ball_box.isInside(block_box) && blocks[i].visibility == true)
 		{
+			
+			gem_chance += rand() % (us.game_time.count()/500);
+
+			if (number_of_gems > 0)
+			{
+				
+				for (int j = 0; j <= gem_array_size; j++)
+				{
+					
+					if (gem_chance >= 50)
+					{
+						gem_chance = 0;
+						us.game_time.count() - us.game_time.count();
+						gem_sprite = gems[j].spriteComponent()->getSprite();
+						gem_sprite->xPos(blocks[i].spriteComponent()->getSprite()->xPos());
+						gem_sprite->yPos(blocks[i].spriteComponent()->getSprite()->yPos());
+						gems[j].visibility = true;
+
+					}
+				}
+			}
 
 			ball_direction.y *= -1;
 			blocks[i].visibility = false;
 			score += 10;
 			number_of_blocks--;
+
+		
 		}
 
 	}
