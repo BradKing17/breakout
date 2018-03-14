@@ -17,6 +17,8 @@ public:
 	~BreakoutGame();
 	virtual bool init() override;
 
+	void initGems();
+
 private:
 	void keyHandler(const ASGE::SharedEventData data);
 	void clickHandler(const ASGE::SharedEventData data);
@@ -25,6 +27,8 @@ private:
 	void paddleMovement(float dt_sec);
 	void ballMovement(float dt_sec);
 	void collision(const ASGE::GameTime & us);
+	void gemSpawn();
+	void gemMovement(float dt_sec);
 
 	virtual void update(const ASGE::GameTime &) override;
 	virtual void render(const ASGE::GameTime &) override;
@@ -36,6 +40,8 @@ private:
 	bool in_menu = true;
 	int score = 0;
 	int lives = 3;
+	float gem_time = 0;
+
 
 	//Block variables
 	int x_pos = 20;
@@ -47,25 +53,29 @@ private:
 	//Gem Variables
 	int gem_array_size = 3;
 	int number_of_gems = gem_array_size;
-	int gem_chance = 0;;
+	int gem_chance = 0;
 
-	vector2 ball_direction = { 2,3 };
+	
 
 	//Add your GameObjects
+
+	//Paddle
 	GameObject paddle;
 	ASGE::Sprite* paddle_sprite = nullptr;
 	rect paddle_box;
 
+	//Ball
 	GameObject ball;
 	ASGE::Sprite* ball_sprite = nullptr;
 	rect ball_box;
+	vector2 ball_direction = { 2,3 };
 
+	//Blocks
 	GameObject blocks[48];
 	ASGE::Sprite* block_sprite;
 	rect block_box;
 
+	//Gems
 	GameObject gems[3];
-	ASGE::Sprite* gem_sprite;
 	rect gem_box;
-
 };

@@ -119,7 +119,6 @@ bool BreakoutGame::init()
 
 		}
 
-		
 
 		block_sprite = blocks[i].spriteComponent()->getSprite();
 		block_sprite->xPos(x_pos);
@@ -137,6 +136,15 @@ bool BreakoutGame::init()
 		blocks[i].visibility = true;
 		
 	}
+
+	initGems();
+	respawn();
+
+	return true;
+}
+
+void BreakoutGame::initGems()
+{
 	for (int i = 0; i < gem_array_size; i++)
 	{
 		if (!gems[i].addSpriteComponent(renderer.get(),
@@ -148,11 +156,6 @@ bool BreakoutGame::init()
 
 		gems[i].visibility = false;
 	}
-
-
-	respawn();
-
-	return true;
 }
 
 /**
@@ -200,16 +203,16 @@ void BreakoutGame::keyHandler(const ASGE::SharedEventData data)
 	{
 		if (key->key == ASGE::KEYS::KEY_A)
 		{
-			paddle.velocity.x = -1;
+			paddle.set_vel_x(-1);
 		}
 		if (key->key == ASGE::KEYS::KEY_D)
 		{
-			paddle.velocity.x = 1;
+			paddle.set_vel_x(1);
 		}
 	}
 	else if (key->action == ASGE::KEYS::KEY_RELEASED)
 	{
-		paddle.velocity.x = 0;
+		paddle.set_vel_x(0);
 	}
 
 }
@@ -244,16 +247,15 @@ void BreakoutGame::update(const ASGE::GameTime& us)
 {
 
 	auto dt_sec = us.delta_time.count() / 1000.0;
-	
+
 
 	//make sure you use delta time in any movement calculations!
 	if (!in_menu)
 	{
 		paddleMovement(dt_sec);
-
 		ballMovement(dt_sec);
-
 		collision(us);
+		gemMovement(dt_sec);
 	}
 }
 
@@ -342,14 +344,14 @@ void BreakoutGame::paddleMovement(float dt_sec)
 
 	if (paddle_sprite->xPos() <= 0)
 	{
-		paddle.velocity.x *= -1;
+		paddle.set_vel_x(paddle.get_vel_x() * -1);
 	}
 	if (paddle_sprite->xPos() + paddle_sprite->width() >= game_width)
 	{
-		paddle.velocity.x *= -1;
+		paddle.set_vel_x(paddle.get_vel_x() * -1);
 	}
 
-	paddle_pos += paddle.velocity.x * paddle.speed* dt_sec;
+	paddle_pos += paddle.get_vel_x() * paddle.speed* dt_sec;
 
 	paddle_sprite->xPos(paddle_pos);
 }
@@ -359,8 +361,6 @@ void BreakoutGame::ballMovement(float dt_sec)
 {
 	auto ball_x_pos = ball_sprite->xPos();
 	auto ball_y_pos = ball_sprite->yPos();
-
-
 
 
 	if (ball_box.isInside(paddle_box))
@@ -397,47 +397,83 @@ void BreakoutGame::ballMovement(float dt_sec)
 }
 
 // Handles all collisions
-void BreakoutGame::collision(const ASGE::GameTime & us)
+void BreakoutGame::collision(const ASGE::GameTime& us)
 {
 	ball_box = ball.spriteComponent()->getBoundingBox();
 	paddle_box = paddle.spriteComponent()->getBoundingBox();
-
-
+	auto dt_sec = us.delta_time.count() / 1000.0;
 	for (int i = 0; i <= block_array_size; i++)
 	{
 
 		block_box = blocks[i].spriteComponent()->getBoundingBox();
 		if (ball_box.isInside(block_box) && blocks[i].visibility == true)
 		{
-			
-			gem_chance += rand() % (us.game_time.count()/500);
+			gem_chance += rand() % (us.game_time.count() / 500);
 
 			if (number_of_gems > 0)
 			{
-				
-				for (int j = 0; j <= gem_array_size; j++)
+				if (gem_chance >= 50)
 				{
-					
-					if (gem_chance >= 50)
-					{
-						gem_chance = 0;
-						us.game_time.count() - us.game_time.count();
-						gem_sprite = gems[j].spriteComponent()->getSprite();
-						gem_sprite->xPos(blocks[i].spriteComponent()->getSprite()->xPos());
-						gem_sprite->yPos(blocks[i].spriteComponent()->getSprite()->yPos());
-						gems[j].visibility = true;
-
-					}
+					gemSpawn();
 				}
 			}
 
 			ball_direction.y *= -1;
 			blocks[i].visibility = false;
-			score += 10;
+			score += 1000;
 			number_of_blocks--;
-
-		
+			break;	
 		}
 
+	}
+}
+
+//Handles gem spawning
+void BreakoutGame::gemSpawn()
+{
+	
+
+	if(gems[number_of_gems-1].visibility == false)
+	{ 
+			gem_chance = 0;						
+			gem_sprite = gems[number_of_gems-1].spriteComponent()->getSprite();	
+			gem_sprite->xPos(((game_width - gem_sprite->width()) / 100) * (rand() % 100 + 1));
+			gem_sprite->yPos(-50);
+			gems[number_of_gems-1].visibility = true;
+			number_of_gems--;
+		
+	}		
+}
+
+//Handles gem movement and collision
+void BreakoutGame::gemMovement(float dt_sec)
+{
+	for (int i = 0; i < gem_array_size; i++)
+	{
+		if (gems[i].visibility == true)
+		{
+			if (gems[i].spriteComponent()->getSprite()->yPos() > game_height)
+			{
+				gems[i].visibility = false;
+				number_of_gems++;
+			}
+			gems[i].set_vel_y(1);
+
+			ASGE::Sprite* gem_sprite = gems[i].spriteComponent()->getSprite();
+			gem_box = gems[i].spriteComponent()->getBoundingBox();
+
+			auto gem_pos = gem_sprite->yPos();
+
+			gem_pos += gems[i].get_vel_y() * (gems[i].speed / 2) * dt_sec;
+
+			gem_sprite->yPos(gem_pos);
+
+			if (paddle_box.isInside(gem_box) && gems[i].visibility == true)
+			{
+				gems[i].visibility = false;
+				number_of_gems++;
+				score += 50000;
+			}
+		}
 	}
 }

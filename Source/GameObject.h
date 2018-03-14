@@ -42,15 +42,21 @@ public:
 	*/
 	 SpriteComponent* spriteComponent();
 
+	 int get_vel_x();
+	 int get_vel_y();
+	 void set_vel_x(int direction);
+	 void set_vel_y(int direction);
 
+	 void normalise();
 private:
 
 	void freeSpriteComponent();	
 	SpriteComponent* sprite_component = nullptr;
+	vector2 velocity = { 0,0 };
 
 public: 
+
 	bool visibility = false;
-	vector2 velocity = { 0,0 };
 	int speed = 300;
 
 };
